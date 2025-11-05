@@ -43,6 +43,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "TYPECODE.out"),
-    clean: true,
+    clean: {
+      keep: /\.gitignore$/,
+    },
   },
 };
