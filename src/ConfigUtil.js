@@ -152,7 +152,7 @@ If you want max performance you should choose no.`,
         when(answers) {
           return answers.use_bwi;
         },
-        default: 924,
+        default: 8924,
       },
     ]);
   //console.log({realm,use_bwi,use_minimap,port});
@@ -178,7 +178,7 @@ If you want max performance you should choose no.`,
       enable_bwi: use_bwi,
       enable_minimap: use_minimap || false,
       expose_CODE: false,
-      port: port || 924,
+      port: port || 8924,
     },
     characters: all_chars.reduce((acc, c_name, i) => {
       acc[c_name] = {
@@ -187,7 +187,7 @@ If you want max performance you should choose no.`,
         version: 0,
       };
       if (typescript_enabled) {
-        acc[c_name].typescript = "caracAL/examples/crabs_with_tophats.js";
+        acc[c_name].typescript = "caracAL/examples/bank_loop.js";
       } else {
         acc[c_name].script = "caracAL/examples/crabs.js";
       }
@@ -227,7 +227,7 @@ function make_cfg_string(conf_object = {}) {
     },
     GG: {
       realm: "ASIAI",
-      typescript: "caracAL/examples/crabs_with_tophats.js",
+      typescript: "caracAL/examples/bank_loop.js",
       enabled: false,
       version: 0,
     },
@@ -279,7 +279,7 @@ module.exports = {
     //useful if you want to dev in regular client
     ${ezpz("web_app.expose_TYPECODE", false)},
     //which port to run webservices on
-    ${ezpz("web_app.port", 924)}
+    ${ezpz("web_app.port", 8924)}
   },
   characters: {
 ${Object.entries(characters)

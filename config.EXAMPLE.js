@@ -45,7 +45,7 @@ module.exports = {
     //useful if you want to dev in regular client
     expose_TYPECODE: false,
     //which port to run webservices on
-    port: 924,
+    port: 8924,
   },
   characters: {
     Wizard: {
@@ -62,7 +62,7 @@ module.exports = {
     },
     GG: {
       realm: "ASIAI",
-      typescript: "caracAL/examples/crabs_with_tophats.js",
+      typescript: "caracAL/examples/bank_loop.js",
       enabled: false,
       version: 0,
     },
