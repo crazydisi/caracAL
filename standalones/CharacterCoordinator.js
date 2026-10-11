@@ -382,11 +382,21 @@ function migrate_old_storage(path, localStorage) {
 
     return result;
   }
-  //TODO beta new logic for #5
-  //i need to implement decent lifecycle-handling
-  ["SIGINT", "SIGTERM", "SIGQUIT"].forEach((signal) =>
-    process.on(signal, async () => {
-      console.log(`Received ${signal} on master. Rounding up clients`);
+  //logging goes through a pipe to main.js. if main.js is already gone
+  //every write throws, which must not keep us from shutting down
+  function try_log(...args) {
+    try {
+      console.log(...args);
+    } catch (e) {}
+  }
+  let shutting_down = false;
+  async function shutdown(reason) {
+    if (shutting_down) return;
+    shutting_down = true;
+    //never linger: if the soft shutdown hangs we still exit
+    setTimeout(() => process.exit(1), 5000).unref();
+    try_log(`${reason} on master. Rounding up clients`);
+    try {
       //softkill all chars, giving them chance to shutdown
       await Promise.all(
         Object.values(character_manage).map((char_block) => {
@@ -394,10 +404,18 @@ function migrate_old_storage(path, localStorage) {
           return softkill_block(char_block);
         }),
       );
-      console.log("now truly exiting");
-      process.exit();
-    }),
+    } catch (e) {}
+    try_log("now truly exiting");
+    process.exit();
+  }
+  ["SIGINT", "SIGTERM", "SIGQUIT", "SIGHUP"].forEach((signal) =>
+    process.on(signal, () => shutdown(`Received ${signal}`)),
   );
+  //ipc to main.js closes when it dies, even on SIGKILL
+  process.on("disconnect", () => shutdown("Lost main process"));
+  //a closed log pipe must not crash us before the children are rounded up
+  process.stdout.on("error", () => {});
+  process.stderr.on("error", () => {});
 
   const tasks = Object.keys(character_manage).forEach((c_name) => {
     const char = character_manage[c_name];

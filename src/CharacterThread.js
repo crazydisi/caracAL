@@ -16,6 +16,12 @@ process.on("unhandledRejection", function (exception) {
   console.warn("promise rejected: \n", exception);
 });
 
+//the coordinator is gone, so nobody would ever stop us.
+//deferred so the runner can still call on_destroy() first
+process.on("disconnect", () => setImmediate(() => process.exit()));
+process.stdout.on("error", () => {});
+process.stderr.on("error", () => {});
+
 const html_spoof = `<!DOCTYPE html>
 <html>
 <head>
@@ -176,12 +182,21 @@ async function make_runner(upper, CODE_file, version, is_typescript) {
   //if its duplicate then no instance and no double shutdown
   ["SIGINT", "SIGTERM", "SIGQUIT"].forEach((signal) =>
     process.on(signal, async () => {
-      console.log(`Received ${signal} on client. Requesting termination`);
-      process.send({
-        type: "shutdown",
-      });
+      try {
+        console.log(`Received ${signal} on client. Requesting termination`);
+        process.send({
+          type: "shutdown",
+        });
+      } catch (e) {
+        process.exit();
+      }
     }),
   );
+  process.on("disconnect", () => {
+    try {
+      vm.runInContext("on_destroy()", runner_context);
+    } catch (e) {}
+  });
 
   //awaits the arrival of a message from parent process
   //indicating the servers_and_characters proxy that we use
