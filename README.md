@@ -114,8 +114,8 @@ log_sinks specifies where your logging goes. More details in the section [log_si
 The web_app section contains configuration that enables caracAL to host a webserver. The port option herein allows to choose which port the webserver should be hosted on.
 The enable_bwi option opens a monitoring panel that displays the status of the characters running within caracAL if set to true.
 The enable_minimap option configures if caracAL should generate a minimap summarizing your current game state. The minimap is located in the monitoring panel. Therefore, if the minimap is enabled, the monitoring panel will always be served and ignore the previous setting.
-The expose_CODE option shares the CODE directory, where your scripts are located, via the webserver. This is useful if you i.e. want to load the scripts you are using in caracAL from the steam client. Scripts shared in this manner will be available i.e. under the URL `localhost:924/CODE/caracAL/tests/cm_test.js`.
-The expose_TYPECODE option is the TypeScript analogon of expose_CODE. It requires enable_TYPECODE to be true. Scripts will be reachable under `http://localhost:924/TYPECODE/caracAL/examples/crabs_with_tophats.js`. Take special note that even though you developed in TypeScript, the output will be compiled and in .js form.
+The expose_CODE option shares the CODE directory, where your scripts are located, via the webserver. This is useful if you i.e. want to load the scripts you are using in caracAL from the steam client. Scripts shared in this manner will be available i.e. under the URL `localhost:8924/CODE/caracAL/tests/cm_test.js`.
+The expose_TYPECODE option is the TypeScript analogon of expose_CODE. It requires enable_TYPECODE to be true. Scripts will be reachable under `http://localhost:8924/TYPECODE/caracAL/examples/crabs_with_tophats.js`. Take special note that even though you developed in TypeScript, the output will be compiled and in .js form.
 If you do not enable either of these options no webserver will be opened. config.js files which do not have the web_app section, i.e. those, which were created before the update, will not open a webserver either.
 
 The characters key contains information about which characters to run.
@@ -130,7 +130,7 @@ Each character has five fields:
 
 ### Running your own code
 
-The default code located is at `./CODE/caracAL/examples/crabs.js` or `./TYPECODE/caracAL/examples/crabs_with_tophats.ts`, as specified by the character properties `script` or `typescript`, depending on wether or not TypeScript is enabled. These scripts make your characters farm tiny crabs on the beach.
+The default code located is at `./CODE/caracAL/examples/crabs.js` or `./TYPECODE/caracAL/examples/bank_loop.ts`, as specified by the character properties `script` or `typescript`, depending on wether or not TypeScript is enabled. The JavaScript script makes your characters farm tiny crabs on the beach, the TypeScript script walks them between the bank and the mainland. `crabs_with_tophats.ts` is still available as a TypeScript crab farming example.
 You can create your own scripts in the `./CODE/` or `./TYPECODE` directory. Since caracAL runs the same files as the game client you should be able to use the exact same files in caracAL.
 
 ## So why should I use caracAL?
@@ -324,7 +324,7 @@ You can rename your custom version with many edits to a name that is not numeric
 
 ## Bot Monitoring Panel
 
-In the most recent version caracAL added the ability to check up on your bots through a web interface. It can be acessed with a browser, such as firefox or chrome. You need to enable this feature through the config.js file, the details of which are also in this document. If you run caracAL on the same machine as your browser and on the default port you can access the panel under the url `http://localhost:924/`.
+In the most recent version caracAL added the ability to check up on your bots through a web interface. It can be acessed with a browser, such as firefox or chrome. You need to enable this feature through the config.js file, the details of which are also in this document. If you run caracAL on the same machine as your browser and on the default port you can access the panel under the url `http://localhost:8924/`.
 It looks somewhat like this:
 ![BWI Image](https://github.com/numbereself/caracAL/blob/main/presentation/bwi.png?raw=true)
 
